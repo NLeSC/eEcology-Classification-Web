@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    {{>commondependencies}}
+    <link rel="stylesheet" type="text/css" href="css/featurescatterplots.css">    
+</head>
+<body>
+    <div class="container-fluid" >
+        <div id="menu">{{>menu}}</div>       
+        <fieldset id="features" class="col-md-8"> 
+          <legend>Features</legend>
+          <ul id="featurelist" class="checkbox-grid"/>
+        </fieldset>
+        <fieldset id="options" class="col-md-4"> 
+          <legend>Options</legend>
+          <label>Subsample percentage <input id="subsamplepercentage" onblur="onPercentageChange()" onchange="onPercentageChange()"/></label> 
+        </fieldset>
+        <fieldset id="labels" class="col-md-4"> 
+          <legend>Labels</legend>
+          <ul id="labellist" class="checkbox-grid"/>
+        </fieldset>
+        <fieldset id="plots" class="col-md-12"> 
+            <legend>Feature scatter plots</legend>
+        </fieldset> 
+    </div>
+         
+    
+</body>
+
+<script src="js/featurescatterplots.js"></script>

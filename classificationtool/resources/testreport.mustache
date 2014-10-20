@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    {{>commondependencies}}
+    <script src="js/testreport.js"></script>
+</head>
+<style>
+    .dl-horizontal dt{
+        text-align: left;
+    }
+</style>
+<body>
+    <div class="container theme-showcase" >
+        <div id="menu">{{>menu}}</div>       
+
+        <div class="container">
+            <h1>Test result</h1>
+            <dl class="dl-horizontal">
+                <dt>Classifier:</dt><dd><span id="classifierdescription"/></dd>
+                <dt>Classified correctly:</dt><dd ><span id="instancescorrect"></span> instances (<span id="percentagecorrect"></span>%)</dd>
+                <dt>Classified incorrectly:</dt><dd ><span id="instancesincorrect"></span> instances (<span id="percentageincorrect"></span>%)</dd>
+                <dt>Kappa statistic:</dt><dd><span id="kappa"/></dd>
+            </dl>
+        </div>
+        
+        <div class="container">
+            <h3>Confusion matrix</h3>
+            <table id="confusionMatrix" class="table table-bordered"></table>
+        </div>
+          
+    </div>
+</body>
+

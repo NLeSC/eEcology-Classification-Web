@@ -1,0 +1,125 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.esciencecenter</groupId>
+  <artifactId>mydropwizardproject</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>mydropwizardproject</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <dropwizard.version>0.7.1</dropwizard.version>
+    <xenon.version>1.0.0</xenon.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.11</version>
+	</dependency>
+    <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-core</artifactId>
+        <version>${dropwizard.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-assets</artifactId>
+        <version>${dropwizard.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>io.dropwizard</groupId>
+    	<artifactId>dropwizard-jersey</artifactId>
+    	<version>${dropwizard.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.sun.jersey.contribs</groupId>
+        <artifactId>jersey-multipart</artifactId>
+        <version>1.8</version>
+    </dependency>
+    <dependency>
+	    <groupId>org.apache.directory.studio</groupId>
+	    <artifactId>org.apache.commons.io</artifactId>
+	    <version>2.4</version>
+    </dependency>
+    <dependency>
+        <groupId>nl.esciencecenter</groupId>
+        <artifactId>xenon</artifactId>
+        <version>${xenon.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.jcraft</groupId>
+        <artifactId>jsch</artifactId>
+        <version>0.1.51</version>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-shade-plugin</artifactId>
+	    <version>1.6</version>
+	    <configuration>
+	        <createDependencyReducedPom>true</createDependencyReducedPom>
+	        <filters>
+	            <filter>
+	                <artifact>*:*</artifact>
+	                <excludes>
+	                    <exclude>META-INF/*.SF</exclude>
+	                    <exclude>META-INF/*.DSA</exclude>
+	                    <exclude>META-INF/*.RSA</exclude>
+	                </excludes>
+	            </filter>
+	        </filters>
+	    </configuration>
+	    <executions>
+	        <execution>
+	            <phase>package</phase>
+	            <goals>
+	                <goal>shade</goal>
+	            </goals>
+	            <configuration>
+	                <transformers>
+	                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+	                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+	                        <mainClass>nl.esciencecenter.mydropwizardproject.HelloWorldApplication</mainClass>
+	                    </transformer>
+	                </transformers>
+	            </configuration>
+	        </execution>
+	    </executions>
+	  </plugin>
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-jar-plugin</artifactId>
+	    <version>2.4</version>
+	    <configuration>
+	        <archive>
+	            <manifest>
+	                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+	            </manifest>
+	        </archive>
+	    </configuration>
+	</plugin>
+    </plugins>
+  </build>
+	  <repositories>
+	    <repository>
+	       <id>xenon</id>
+	       <url>http://nlesc.github.io/Xenon/repo</url>
+	       <releases>
+	         <enabled>true</enabled>
+	       </releases>
+	       <snapshots>
+	         <enabled>false</enabled>
+	       </snapshots>
+	     </repository>
+	   </repositories>
+
+</project>
