@@ -92,7 +92,6 @@ public class CreateJobCommandTest {
     @Before
     public void setUp() {
         command = new CreateJobCommand(testId);
-
     }
 
     @After
