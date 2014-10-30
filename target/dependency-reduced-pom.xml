@@ -21,7 +21,7 @@
               <transformers>
                 <transformer />
                 <transformer>
-                  <mainClass>nl.esciencecenter.mydropwizardproject.HelloWorldApplication</mainClass>
+                  <mainClass>nl.esciencecenter.mydropwizardproject.ClassificationWebApplication</mainClass>
                 </transformer>
               </transformers>
             </configuration>

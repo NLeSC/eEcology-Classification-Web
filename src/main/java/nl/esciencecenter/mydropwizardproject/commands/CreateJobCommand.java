@@ -3,88 +3,47 @@ package nl.esciencecenter.mydropwizardproject.commands;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.UUID;
 
-import nl.esciencecenter.xenon.Xenon;
-import nl.esciencecenter.xenon.XenonException;
-import nl.esciencecenter.xenon.XenonFactory;
-import nl.esciencecenter.xenon.jobs.Job;
-import nl.esciencecenter.xenon.jobs.JobDescription;
-import nl.esciencecenter.xenon.jobs.Scheduler;
+import nl.esciencecenter.mydropwizardproject.PathManager;
+import nl.esciencecenter.mydropwizardproject.XenonManager;
 
 import org.apache.commons.io.FileUtils;
 
-public class CreateJobCommand implements Command {
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 
-    private final UUID id;
-    private InputStream annotatedData;
-    private String annotatedDataFileName;
-    private InputStream config;
-    private String configFileName;
-    private InputStream schema;
-    private String schemaFileName;
+public class CreateJobCommand implements Command<CreateJobCommandParameters> {
+    @Inject
+    protected XenonManager xenonManager;
+    @Inject
+    protected ObjectMapper objectMapper;
+    @Inject
+    protected PathManager pathManager;
 
-    public CreateJobCommand(UUID id) {
-        this.id = id;
-    }
-
-    public void setSchema(InputStream schema) {
-        this.schema = schema;
-    }
-
-    public void setSchemaFileName(String schemaFileName) {
-        this.schemaFileName = schemaFileName;
-    }
-
-    public void setAnnotatedData(InputStream annotatedData) {
-        this.annotatedData = annotatedData;
-    }
-
-    public void setAnnotatedDataFileName(String annotatedDataFileName) {
-        this.annotatedDataFileName = annotatedDataFileName;
-    }
-
-    public void setConfig(InputStream config) {
-        this.config = config;
-    }
-
-    public void setConfigFileName(String configFileName) {
-        this.configFileName = configFileName;
-    }
-
-    public void execute() {
-        File dir = new File("jobs" + File.separator + id.toString());
+    @Override
+    public void execute(CreateJobCommandParameters parameters) {
+        UUID id = parameters.getId();
+        File dir = new File(pathManager.getJobPath(id).toString());
         dir.mkdir();
-        saveDataToFile(annotatedData, dir, annotatedDataFileName);
-        saveDataToFile(config, dir, configFileName);
-        saveDataToFile(schema, dir, schemaFileName);
-        createXenonJob(id);
+        saveDataToFile(parameters.getAnnotatedData(), dir, parameters.getAnnotatedDataFileName());
+        saveDataToFile(parameters.getConfig(), dir, parameters.getConfigFileName());
+        saveDataToFile(parameters.getSchema(), dir, parameters.getSchemaFileName());
+        createStatusFile(dir, parameters);
+        xenonManager.createXenonJob(id);
     }
 
-    private void createXenonJob(UUID jobId) {
-        JobDescription jobDescription = new JobDescription();
-        jobDescription.setExecutable("java");
-        String jobDirectory = "../jobs/" + jobId.toString();
-        jobDescription.setArguments("-jar", "classificationtool.jar", jobDirectory);
-        jobDescription.setWorkingDirectory("classificationtool");
-        jobDescription.setStdout(jobDirectory + "/stdout.txt");
-        jobDescription.setStderr(jobDirectory + "/stderr.txt");
-        Xenon xenon;
-        Scheduler scheduler;
+    private void createStatusFile(File dir, CreateJobCommandParameters parameters) {
         try {
-            //start xenon
-            xenon = XenonFactory.newXenon(null);
-            scheduler = xenon.jobs().newScheduler("local", null, null, null);
-
-            //add job
-            Job job = xenon.jobs().submitJob(scheduler, jobDescription);
-            xenon.jobs().waitUntilDone(job, 30000);
-
-            //close xenon
-            xenon.jobs().close(scheduler);
-            XenonFactory.endXenon(xenon);
-        } catch (XenonException e) {
-            throw new RuntimeException("Xenon threw an exception.", e);
+            Path statusFilePath = pathManager.getJobStatusFilePath(parameters.getId());
+            HashMap<String, String> statusMap = new HashMap<String, String>();
+            statusMap.put("isDone", "false");
+            statusMap.put("id", parameters.getId().toString());
+            objectMapper.writeValue(new File(statusFilePath.toString()), statusMap);
+        } catch (IOException e) {
+            throw new RuntimeException("Status of job (" + parameters.getId() + ") could not be retrieved.", e);
         }
     }
 
