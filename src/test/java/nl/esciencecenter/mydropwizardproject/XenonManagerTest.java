@@ -27,7 +27,7 @@ public class XenonManagerTest {
         xenonManager.start();
 
         // Act
-        xenonManager.createXenonJob(testId);
+        xenonManager.createXenonJobAndReturnXenonJobId(testId);
         xenonManager.stop();
 
         // Assert

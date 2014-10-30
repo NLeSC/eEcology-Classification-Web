@@ -31,8 +31,8 @@ var showPolling = function(polling){
 
 var poll = function(){
     showPolling(true);
-    var id = window.location.search.substring(1); // queryString minus '?''
-    d3.json("../jobstatuses?id=" + id, function(error, json){   
+    var idKeyValuePair = window.location.search.substring(1); // queryString minus '?''
+    d3.json("../jobstatuses?" + idKeyValuePair, function(error, json){   
     d3.select("#id").text(json.id);
     if (json.jobReady == true){
         showPolling(false);

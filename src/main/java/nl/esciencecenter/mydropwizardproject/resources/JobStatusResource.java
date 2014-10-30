@@ -22,7 +22,7 @@ public class JobStatusResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Saying getJobStatus(@QueryParam(value = "id") final String jobId) {
+    public Saying getJobStatus(@QueryParam("id") final String jobId) {
         IsJobDoneQueryParameters parameters = new IsJobDoneQueryParameters();
         parameters.setJobId(UUID.fromString(jobId));
         IsJobDoneQueryResult queryResult = isJobDoneQuery.run(parameters);

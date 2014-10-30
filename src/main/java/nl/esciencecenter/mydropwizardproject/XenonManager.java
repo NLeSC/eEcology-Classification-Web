@@ -9,7 +9,6 @@ import nl.esciencecenter.xenon.XenonException;
 import nl.esciencecenter.xenon.XenonFactory;
 import nl.esciencecenter.xenon.jobs.Job;
 import nl.esciencecenter.xenon.jobs.JobDescription;
-import nl.esciencecenter.xenon.jobs.Jobs;
 import nl.esciencecenter.xenon.jobs.Scheduler;
 
 import com.google.inject.Inject;
@@ -44,11 +43,11 @@ public class XenonManager implements Managed {
         }
     }
 
-    public void createXenonJob(UUID jobId) {
+    public String createXenonJobAndReturnXenonJobId(UUID jobId) {
         JobDescription jobDescription = createJobDescription(jobId);
         try {
             Job job = xenon.jobs().submitJob(scheduler, jobDescription);
-            xenon.jobs().waitUntilDone(job, 30000);
+            return job.getIdentifier();
         } catch (XenonException e) {
             throw new RuntimeException("Xenon threw an exception.", e);
         }

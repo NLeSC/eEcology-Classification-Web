@@ -31,16 +31,17 @@ public class CreateJobCommand implements Command<CreateJobCommandParameters> {
         saveDataToFile(parameters.getAnnotatedData(), dir, parameters.getAnnotatedDataFileName());
         saveDataToFile(parameters.getConfig(), dir, parameters.getConfigFileName());
         saveDataToFile(parameters.getSchema(), dir, parameters.getSchemaFileName());
-        createStatusFile(dir, parameters);
-        xenonManager.createXenonJob(id);
+        String createXenonJob = xenonManager.createXenonJobAndReturnXenonJobId(id);
+        createStatusFile(dir, parameters, createXenonJob);
     }
 
-    private void createStatusFile(File dir, CreateJobCommandParameters parameters) {
+    private void createStatusFile(File dir, CreateJobCommandParameters parameters, String xenonJobId) {
         try {
             Path statusFilePath = pathManager.getJobStatusFilePath(parameters.getId());
             HashMap<String, String> statusMap = new HashMap<String, String>();
             statusMap.put("isDone", "false");
             statusMap.put("id", parameters.getId().toString());
+            statusMap.put("xenonJobId", xenonJobId);
             objectMapper.writeValue(new File(statusFilePath.toString()), statusMap);
         } catch (IOException e) {
             throw new RuntimeException("Status of job (" + parameters.getId() + ") could not be retrieved.", e);
