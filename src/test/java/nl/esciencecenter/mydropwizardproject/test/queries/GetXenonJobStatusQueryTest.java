@@ -1,4 +1,4 @@
-package nl.esciencecenter.mydropwizardproject.queries;
+package nl.esciencecenter.mydropwizardproject.test.queries;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,8 @@ import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManagerFixture;
 import nl.esciencecenter.mydropwizardproject.XenonManagerFixture;
-import nl.esciencecenter.mydropwizardproject.test.queries.GetXenonJobStatusQueryFixture;
+import nl.esciencecenter.mydropwizardproject.queries.GetXenonJobStatusQueryParameters;
+import nl.esciencecenter.mydropwizardproject.queries.GetXenonJobStatusQueryResult;
 
 import org.junit.After;
 import org.junit.Before;

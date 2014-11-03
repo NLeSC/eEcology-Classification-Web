@@ -1,4 +1,4 @@
-package nl.esciencecenter.mydropwizardproject.queries;
+package nl.esciencecenter.mydropwizardproject.test.queries;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManagerFixture;
+import nl.esciencecenter.mydropwizardproject.queries.IsJobDoneQueryParameters;
+import nl.esciencecenter.mydropwizardproject.queries.IsJobDoneQueryResult;
 
 import org.junit.Before;
 import org.junit.Test;

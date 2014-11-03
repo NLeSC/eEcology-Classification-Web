@@ -1,4 +1,4 @@
-package nl.esciencecenter.mydropwizardproject.commands;
+package nl.esciencecenter.mydropwizardproject.test.commands;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManagerFixture;
 import nl.esciencecenter.mydropwizardproject.XenonManagerFixture;
+import nl.esciencecenter.mydropwizardproject.commands.CreateJobCommandParameters;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;

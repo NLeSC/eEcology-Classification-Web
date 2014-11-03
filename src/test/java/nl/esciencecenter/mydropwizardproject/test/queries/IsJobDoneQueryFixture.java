@@ -1,6 +1,7 @@
-package nl.esciencecenter.mydropwizardproject.queries;
+package nl.esciencecenter.mydropwizardproject.test.queries;
 
 import nl.esciencecenter.mydropwizardproject.PathManager;
+import nl.esciencecenter.mydropwizardproject.queries.IsJobDoneQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

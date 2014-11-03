@@ -1,7 +1,8 @@
-package nl.esciencecenter.mydropwizardproject.commands;
+package nl.esciencecenter.mydropwizardproject.test.commands;
 
 import nl.esciencecenter.mydropwizardproject.PathManager;
 import nl.esciencecenter.mydropwizardproject.XenonManager;
+import nl.esciencecenter.mydropwizardproject.commands.CreateJobCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
