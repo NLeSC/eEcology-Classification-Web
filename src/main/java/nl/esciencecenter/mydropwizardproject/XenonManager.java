@@ -2,6 +2,7 @@ package nl.esciencecenter.mydropwizardproject;
 
 import io.dropwizard.lifecycle.Managed;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import nl.esciencecenter.xenon.Xenon;
@@ -9,6 +10,7 @@ import nl.esciencecenter.xenon.XenonException;
 import nl.esciencecenter.xenon.XenonFactory;
 import nl.esciencecenter.xenon.jobs.Job;
 import nl.esciencecenter.xenon.jobs.JobDescription;
+import nl.esciencecenter.xenon.jobs.JobStatus;
 import nl.esciencecenter.xenon.jobs.Scheduler;
 
 import com.google.inject.Inject;
@@ -39,7 +41,7 @@ public class XenonManager implements Managed {
         try {
             xenon.jobs().close(scheduler);
         } catch (XenonException e) {
-            throw new RuntimeException("Xenon threw an exception.", e);
+            throw getGenericXenonException(e);
         }
     }
 
@@ -49,8 +51,29 @@ public class XenonManager implements Managed {
             Job job = xenon.jobs().submitJob(scheduler, jobDescription);
             return job.getIdentifier();
         } catch (XenonException e) {
-            throw new RuntimeException("Xenon threw an exception.", e);
+            throw getGenericXenonException(e);
         }
+    }
+
+    public JobStatus getXenonJobStatus(String xenonJobId) {
+
+        try {
+            String[] queueNames = scheduler.getQueueNames();
+            Job[] jobs = xenon.jobs().getJobs(scheduler, queueNames);
+            Job targetJob = Arrays.stream(jobs).filter(job -> job.getIdentifier() == xenonJobId).findFirst().orElse(null);
+            if (targetJob == null) {
+                return null;
+            }
+            return xenon.jobs().getJobStatus(targetJob);
+
+        } catch (XenonException e) {
+            throw getGenericXenonException(e);
+        }
+
+    }
+
+    private RuntimeException getGenericXenonException(XenonException e) {
+        return new RuntimeException("Xenon threw an exception.", e);
     }
 
     private JobDescription createJobDescription(UUID jobId) {
@@ -69,7 +92,8 @@ public class XenonManager implements Managed {
             xenon = XenonFactory.newXenon(null);
             scheduler = xenon.jobs().newScheduler("local", null, null, null);
         } catch (XenonException e) {
-            throw new RuntimeException("Xenon threw an exception.", e);
+            throw getGenericXenonException(e);
         }
     }
+
 }
