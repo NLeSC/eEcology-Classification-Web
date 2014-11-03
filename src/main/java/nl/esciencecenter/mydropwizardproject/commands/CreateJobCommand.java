@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManager;
 import nl.esciencecenter.mydropwizardproject.XenonManager;
+import nl.esciencecenter.mydropwizardproject.domain.JobStatus;
 
 import org.apache.commons.io.FileUtils;
 
@@ -38,10 +38,10 @@ public class CreateJobCommand implements Command<CreateJobCommandParameters> {
     private void createStatusFile(File dir, CreateJobCommandParameters parameters, String xenonJobId) {
         try {
             Path statusFilePath = pathManager.getJobStatusFilePath(parameters.getId());
-            HashMap<String, String> statusMap = new HashMap<String, String>();
-            statusMap.put("isDone", "false");
-            statusMap.put("id", parameters.getId().toString());
-            statusMap.put("xenonJobId", xenonJobId);
+            JobStatus statusMap = new JobStatus();
+            statusMap.setDone(false);
+            statusMap.setJobId(parameters.getId());
+            statusMap.setXenonJobId(xenonJobId);
             objectMapper.writeValue(new File(statusFilePath.toString()), statusMap);
         } catch (IOException e) {
             throw new RuntimeException("Status of job (" + parameters.getId() + ") could not be retrieved.", e);

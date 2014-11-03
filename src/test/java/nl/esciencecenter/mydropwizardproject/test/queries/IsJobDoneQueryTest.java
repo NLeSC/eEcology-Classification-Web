@@ -15,7 +15,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class IsJobDoneQueryTest {
-    private String testJobDir;
     private final UUID unfinishedJobId = UUID.fromString("36efb35c-c99c-4c3a-8f2d-0bf8354ccad4");
     private final UUID finishedJobId = UUID.fromString("c8c7e110-5155-11e4-916c-0800200c9a66");
     private IsJobDoneQueryFixture isJobDoneQuery;
@@ -51,7 +50,6 @@ public class IsJobDoneQueryTest {
         isJobDoneQuery = new IsJobDoneQueryFixture();
         isJobDoneQuery.setObjectMapper(new ObjectMapper());
         PathManagerFixture pathManager = new PathManagerFixture();
-        testJobDir = pathManager.getJobsPath().toString();
         isJobDoneQuery.setPathManager(pathManager);
     }
 }

@@ -2,11 +2,10 @@ package nl.esciencecenter.mydropwizardproject.queries;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManager;
+import nl.esciencecenter.mydropwizardproject.domain.JobStatus;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,19 +19,17 @@ public class IsJobDoneQuery implements Query<IsJobDoneQueryParameters, IsJobDone
 
     @Override
     public IsJobDoneQueryResult run(IsJobDoneQueryParameters parameters) {
-        Map<String, String> map = getStatusMap(parameters);
-        boolean isDone = Boolean.parseBoolean(map.get("isDone"));
+        JobStatus jobStatus = getStatus(parameters);
         IsJobDoneQueryResult result = new IsJobDoneQueryResult();
-        result.setDone(isDone);
+        result.setDone(jobStatus.isDone());
         return result;
     }
 
-    private Map<String, String> getStatusMap(IsJobDoneQueryParameters parameters) {
-        Map<String, String> map = null;
+    private JobStatus getStatus(IsJobDoneQueryParameters parameters) {
+        JobStatus map = null;
         try {
-            map = objectMapper.readValue(new File(getStatusFileLocation(parameters.getJobId())),
-                    new TypeReference<HashMap<String, String>>() {
-                    });
+            map = objectMapper.readValue(new File(getStatusFileLocation(parameters.getJobId())), new TypeReference<JobStatus>() {
+            });
         } catch (IOException e) {
             throw new RuntimeException("Status of job (" + parameters.getJobId() + ") could not be retrieved.", e);
         }
