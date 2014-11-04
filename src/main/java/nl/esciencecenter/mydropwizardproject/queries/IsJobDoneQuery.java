@@ -17,7 +17,6 @@ public class IsJobDoneQuery implements Query<IsJobDoneQueryParameters, IsJobDone
     @Inject
     protected PathManager pathManager;
 
-    @Inject
     @Override
     public IsJobDoneQueryResult run(IsJobDoneQueryParameters parameters) {
         JobStatus jobStatus = getStatus(parameters);
