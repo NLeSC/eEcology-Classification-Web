@@ -17,11 +17,13 @@ public class IsJobDoneQuery implements Query<IsJobDoneQueryParameters, IsJobDone
     @Inject
     protected PathManager pathManager;
 
+    @Inject
     @Override
     public IsJobDoneQueryResult run(IsJobDoneQueryParameters parameters) {
         JobStatus jobStatus = getStatus(parameters);
         IsJobDoneQueryResult result = new IsJobDoneQueryResult();
-        result.setDone(jobStatus.isDone());
+        boolean isDone = jobStatus.isDone();
+        result.setDone(isDone);
         return result;
     }
 
