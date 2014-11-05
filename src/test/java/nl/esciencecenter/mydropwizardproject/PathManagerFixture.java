@@ -16,4 +16,9 @@ public class PathManagerFixture extends PathManager {
     public Path getJobsPath() {
         return jobsPath;
     }
+
+    public void setClassificationToolPath(Path classificationToolPath) {
+        this.classificationToolPath = classificationToolPath;
+    }
+
 }

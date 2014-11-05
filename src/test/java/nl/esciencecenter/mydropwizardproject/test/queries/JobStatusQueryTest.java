@@ -6,27 +6,24 @@ import java.io.IOException;
 import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManagerFixture;
-import nl.esciencecenter.mydropwizardproject.queries.IsJobDoneQueryParameters;
-import nl.esciencecenter.mydropwizardproject.queries.IsJobDoneQueryResult;
+import nl.esciencecenter.mydropwizardproject.domain.JobStatus;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class IsJobDoneQueryTest {
+public class JobStatusQueryTest {
     private final UUID unfinishedJobId = UUID.fromString("36efb35c-c99c-4c3a-8f2d-0bf8354ccad4");
     private final UUID finishedJobId = UUID.fromString("c8c7e110-5155-11e4-916c-0800200c9a66");
-    private IsJobDoneQueryFixture isJobDoneQuery;
+    private JobStatusQueryFixture jobStatusQuery;
 
     @Test
     public void unfinishedJobId_isDoneIsFalse() throws IOException {
         // Arrange
-        IsJobDoneQueryParameters parameters = new IsJobDoneQueryParameters();
-        parameters.setJobId(unfinishedJobId);
 
         // Act
-        IsJobDoneQueryResult result = isJobDoneQuery.run(parameters);
+        JobStatus result = jobStatusQuery.run(unfinishedJobId);
 
         // Assert
         assertEquals(false, result.isDone());
@@ -35,11 +32,9 @@ public class IsJobDoneQueryTest {
     @Test
     public void finishedJobId_isDoneIsTrue() throws IOException {
         // Arrange
-        IsJobDoneQueryParameters parameters = new IsJobDoneQueryParameters();
-        parameters.setJobId(finishedJobId);
 
         // Act
-        IsJobDoneQueryResult result = isJobDoneQuery.run(parameters);
+        JobStatus result = jobStatusQuery.run(finishedJobId);
 
         // Assert
         assertEquals(true, result.isDone());
@@ -47,9 +42,9 @@ public class IsJobDoneQueryTest {
 
     @Before
     public void setUp() {
-        isJobDoneQuery = new IsJobDoneQueryFixture();
-        isJobDoneQuery.setObjectMapper(new ObjectMapper());
+        jobStatusQuery = new JobStatusQueryFixture();
+        jobStatusQuery.setObjectMapper(new ObjectMapper());
         PathManagerFixture pathManager = new PathManagerFixture();
-        isJobDoneQuery.setPathManager(pathManager);
+        jobStatusQuery.setPathManager(pathManager);
     }
 }

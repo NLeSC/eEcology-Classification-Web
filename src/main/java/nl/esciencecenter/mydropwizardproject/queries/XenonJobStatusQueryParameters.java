@@ -1,7 +1,7 @@
 package nl.esciencecenter.mydropwizardproject.queries;
 
 
-public class GetXenonJobStatusQueryParameters implements QueryParameters {
+public class XenonJobStatusQueryParameters implements QueryParameters {
 
     private String xenonJobId;
 

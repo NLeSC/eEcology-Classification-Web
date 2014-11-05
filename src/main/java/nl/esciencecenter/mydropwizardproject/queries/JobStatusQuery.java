@@ -11,28 +11,25 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
-public class IsJobDoneQuery implements Query<IsJobDoneQueryParameters, IsJobDoneQueryResult> {
+public class JobStatusQuery implements Query<UUID, JobStatus> {
     @Inject
     protected ObjectMapper objectMapper;
     @Inject
     protected PathManager pathManager;
 
     @Override
-    public IsJobDoneQueryResult run(IsJobDoneQueryParameters parameters) {
-        JobStatus jobStatus = getStatus(parameters);
-        IsJobDoneQueryResult result = new IsJobDoneQueryResult();
-        boolean isDone = jobStatus.isDone();
-        result.setDone(isDone);
-        return result;
+    public JobStatus run(UUID jobId) {
+        JobStatus jobStatus = getStatus(jobId);
+        return jobStatus;
     }
 
-    private JobStatus getStatus(IsJobDoneQueryParameters parameters) {
+    private JobStatus getStatus(UUID jobId) {
         JobStatus map = null;
         try {
-            map = objectMapper.readValue(new File(getStatusFileLocation(parameters.getJobId())), new TypeReference<JobStatus>() {
+            map = objectMapper.readValue(new File(getStatusFileLocation(jobId)), new TypeReference<JobStatus>() {
             });
         } catch (IOException e) {
-            throw new RuntimeException("Status of job (" + parameters.getJobId() + ") could not be retrieved.", e);
+            throw new RuntimeException("Status of job (" + jobId + ") could not be retrieved.", e);
         }
         return map;
     }

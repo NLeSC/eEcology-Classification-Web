@@ -7,6 +7,7 @@ import java.util.UUID;
 public class PathManager {
 
     protected Path jobsPath = Paths.get("jobs");
+    protected Path classificationToolPath = Paths.get("classificationtool");
     private final String statusFileName = "status.json";
 
     public Path getJobPath(UUID jobId) {
@@ -17,4 +18,11 @@ public class PathManager {
         return getJobPath(jobId).resolve(statusFileName);
     }
 
+    public Path getClassificationToolPath() {
+        return classificationToolPath;
+    }
+
+    public Path getJobPathForClassificationTool(UUID jobId) {
+        return getClassificationToolPath().relativize(getJobPath(jobId));
+    }
 }

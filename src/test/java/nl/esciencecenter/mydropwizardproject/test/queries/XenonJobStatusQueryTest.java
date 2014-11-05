@@ -6,30 +6,30 @@ import java.util.UUID;
 
 import nl.esciencecenter.mydropwizardproject.PathManagerFixture;
 import nl.esciencecenter.mydropwizardproject.XenonManagerFixture;
-import nl.esciencecenter.mydropwizardproject.queries.GetXenonJobStatusQueryParameters;
-import nl.esciencecenter.mydropwizardproject.queries.GetXenonJobStatusQueryResult;
+import nl.esciencecenter.mydropwizardproject.queries.XenonJobStatusQueryParameters;
+import nl.esciencecenter.mydropwizardproject.queries.XenonJobStatusQueryResult;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GetXenonJobStatusQueryTest {
+public class XenonJobStatusQueryTest {
 
-    private GetXenonJobStatusQueryFixture getXenonJobStatusQuery;
-    private GetXenonJobStatusQueryParameters parameters;
+    private XenonJobStatusQueryFixture getXenonJobStatusQuery;
+    private XenonJobStatusQueryParameters parameters;
     private XenonManagerFixture xenonManagerFixture;
     private final UUID fastJobId = UUID.fromString("7b1dc80d-a18f-4cf8-bc7d-84140a1e201e"); // A fast job where nothing has to be executed
 
     @Test
     public void jobIsFinished_returnIsDoneIsTrue() throws InterruptedException {
         // Arrange
-        String xenonJobId = xenonManagerFixture.createXenonJobAndReturnXenonJobId(fastJobId);
-        parameters = new GetXenonJobStatusQueryParameters();
+        String xenonJobId = new String(xenonManagerFixture.createXenonJobAndReturnXenonJobId(fastJobId));
+        parameters = new XenonJobStatusQueryParameters();
         parameters.setXenonJobId(xenonJobId);
         Thread.sleep(100); // Wait to be sure that the job was finished
 
         // Act
-        GetXenonJobStatusQueryResult result = getXenonJobStatusQuery.run(parameters);
+        XenonJobStatusQueryResult result = getXenonJobStatusQuery.run(parameters);
 
         // Assert
         assertEquals(true, result.isDone());
@@ -39,11 +39,11 @@ public class GetXenonJobStatusQueryTest {
     public void jobNotSubmitted_returnIsDoneIsFalse() {
         // Arrange
         String xenonJobId = "nonExistentId";
-        parameters = new GetXenonJobStatusQueryParameters();
+        parameters = new XenonJobStatusQueryParameters();
         parameters.setXenonJobId(xenonJobId);
 
         // Act
-        GetXenonJobStatusQueryResult result = getXenonJobStatusQuery.run(parameters);
+        XenonJobStatusQueryResult result = getXenonJobStatusQuery.run(parameters);
 
         // Assert
         assertEquals(false, result.isDone());
@@ -51,7 +51,7 @@ public class GetXenonJobStatusQueryTest {
 
     @Before
     public void setUp() {
-        getXenonJobStatusQuery = new GetXenonJobStatusQueryFixture();
+        getXenonJobStatusQuery = new XenonJobStatusQueryFixture();
         xenonManagerFixture = new XenonManagerFixture();
         xenonManagerFixture.setPathManager(new PathManagerFixture());
         xenonManagerFixture.start();

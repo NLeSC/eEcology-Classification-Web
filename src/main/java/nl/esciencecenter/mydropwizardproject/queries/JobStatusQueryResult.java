@@ -1,6 +1,6 @@
 package nl.esciencecenter.mydropwizardproject.queries;
 
-public class IsJobDoneQueryResult implements QueryResult {
+public class JobStatusQueryResult implements QueryResult {
 
     private boolean isDone;
 

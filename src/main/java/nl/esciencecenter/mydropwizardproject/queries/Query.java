@@ -1,5 +1,5 @@
 package nl.esciencecenter.mydropwizardproject.queries;
 
-public interface Query<Parameters extends QueryParameters, Result extends QueryResult> {
+public interface Query<Parameters, Result> {
     public Result run(Parameters parameters);
 }

@@ -1,6 +1,6 @@
 package nl.esciencecenter.mydropwizardproject.queries;
 
-public class GetXenonJobStatusQueryResult implements QueryResult {
+public class XenonJobStatusQueryResult implements QueryResult {
 
     private boolean isDone;
 

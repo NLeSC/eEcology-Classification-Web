@@ -2,6 +2,7 @@ package nl.esciencecenter.mydropwizardproject;
 
 import io.dropwizard.lifecycle.Managed;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -56,11 +57,11 @@ public class XenonManager implements Managed {
     }
 
     public JobStatus getXenonJobStatus(String xenonJobId) {
-
         try {
             String[] queueNames = scheduler.getQueueNames();
             Job[] jobs = xenon.jobs().getJobs(scheduler, queueNames);
-            Job targetJob = Arrays.stream(jobs).filter(job -> job.getIdentifier() == xenonJobId).findFirst().orElse(null);
+            Job targetJob = Arrays.stream(jobs).filter(job -> xenonJobId.equalsIgnoreCase(job.getIdentifier())).findFirst()
+                    .orElse(null);
             if (targetJob == null) {
                 return null;
             }
@@ -77,13 +78,13 @@ public class XenonManager implements Managed {
     }
 
     private JobDescription createJobDescription(UUID jobId) {
-        String jobDirectory = pathManager.getJobPath(jobId).toString();
+        Path jobDirectory = pathManager.getJobPathForClassificationTool(jobId);
         JobDescription jobDescription = new JobDescription();
         jobDescription.setExecutable("java");
-        jobDescription.setArguments("-jar", "classificationtool.jar", jobDirectory);
-        jobDescription.setWorkingDirectory("classificationtool");
-        jobDescription.setStdout(jobDirectory + "/stdout.txt");
-        jobDescription.setStderr(jobDirectory + "/stderr.txt");
+        jobDescription.setArguments("-jar", "classificationtool.jar", jobDirectory.toString());
+        jobDescription.setWorkingDirectory(pathManager.getClassificationToolPath().toString());
+        jobDescription.setStdout(jobDirectory.resolve("stdout.txt").toString());
+        jobDescription.setStderr(jobDirectory.resolve("stderr.txt").toString());
         return jobDescription;
     }
 

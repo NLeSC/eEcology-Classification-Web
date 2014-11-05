@@ -6,6 +6,6 @@ package nl.esciencecenter.mydropwizardproject.commands;
  * @author christiaan
  *
  */
-public interface Command<Parameters extends CommandParameters> {
+public interface Command<Parameters> {
     public void execute(Parameters parameters);
 }
